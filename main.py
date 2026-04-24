@@ -1,5 +1,7 @@
 import math
 import time
+from multiprocessing import Pool, cpu_count #will use the max about of cores available
+
 
 def isPrime(n):
     if n <= 1: 
@@ -11,26 +13,43 @@ def isPrime(n):
         
     return True
 
+def PrimeList(n): ##helps us get our actual list of all primes, not just a list of boolean values
+    if isPrime(n) == True:
+        return n
+    else:
+        return None
 
 
-# how to partition a litst
-data = list(range(1, 1000000))
-chunk_a = data[:25]
-chunk_b = data[25:50]
-chunk_c = data[50:75]
-chunk_d = data[75:100]
+
+data = list(range(1, 1000000)) #this is global
+
 
 # how to assign lists with specific instructions
 # tenCount_data = [x for x in data if x % 2 == 0 and x % 5 == 0] #to make a list of all things divisable by tens
 
 if __name__ == "__main__":
-    # Your code that actually DOES things goes here
+    #  code that actually DOES things goes here
 
+#############// SINGLE THREADED //############
     start_time_prime = time.perf_counter() # starts timer
 
     prime_data = [x for x in data if isPrime(x) == True] #it it is prime then add it to the list
 
     end_time_prime = time.perf_counter() # ends the timer
+
+
+#############// MULTI THREADED //############
+
+
+    start_time_prime_threaded = time.perf_counter()
+
+    with Pool(cpu_count()) as Workers: #auto divides the work into equal parts for all available cores
+
+        threaded_prime = Workers.map(PrimeList, data) #auto does the logic, checks is prime for each member of data
+
+        CleanPrimeList = [p for p in threaded_prime if p is not None] #cleans away the 'none' variables
+
+    end_time_prime_threaded = time.perf_counter()
 
 
 
@@ -44,5 +63,8 @@ if __name__ == "__main__":
     
 
     #print (f"Primes: {prime_data}")
+    print (f"Num of Primes for Single: {len(prime_data)}")
     print (f"Single thread time-elapsed: {end_time_prime - start_time_prime} (in seconds)")
+    print (f"Num of Primes for Multi: {len(CleanPrimeList)}")
+    print (f"Multi thread time-elapsed: {end_time_prime_threaded - start_time_prime_threaded} (in seconds)")
 
