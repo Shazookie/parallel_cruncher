@@ -18,22 +18,16 @@ def PrimeList(n): ##helps us get our actual list of all primes, not just a list 
         return n
     else:
         return None
+    
 
+def driver(x):
+    listOfNums = list(range(1, x)) #this is global
 
-
-data = list(range(1, 1000000)) #this is global
-
-
-# how to assign lists with specific instructions
-# tenCount_data = [x for x in data if x % 2 == 0 and x % 5 == 0] #to make a list of all things divisable by tens
-
-if __name__ == "__main__":
-    #  code that actually DOES things goes here
 
 #############// SINGLE THREADED //############
     start_time_prime = time.perf_counter() # starts timer
 
-    prime_data = [x for x in data if isPrime(x) == True] #it it is prime then add it to the list
+    prime_data = [x for x in listOfNums if isPrime(x) == True] #it it is prime then add it to the list
 
     end_time_prime = time.perf_counter() # ends the timer
 
@@ -47,7 +41,7 @@ if __name__ == "__main__":
 
     with Pool(cpu_count()) as Workers: #auto divides the work into equal parts for all available cores
 
-        threaded_prime = Workers.map(PrimeList, data) #auto does the logic, checks is prime for each member of data
+        threaded_prime = Workers.map(PrimeList, listOfNums) #auto does the logic, checks is prime for each member of data
 
         CleanPrimeList = [p for p in threaded_prime if p is not None] #cleans away the 'none' variables
 
@@ -56,9 +50,33 @@ if __name__ == "__main__":
     multi_time = end_time_prime_threaded - start_time_prime_threaded
 
     #efficiently calculator
-
     speed = (single_time / multi_time)
     efficiency = speed / cpu_count()
+
+    print (f"Num of Primes for Single: {len(prime_data)}")
+    print (f"Single thread time-elapsed: {single_time} (in seconds)")
+    print (f"Num of Primes for Multi: {len(CleanPrimeList)}")
+    print (f"Multi thread time-elapsed: {multi_time} (in seconds)")
+    print (f"Multi is: {speed} times faster")
+    print (f"Multi is this percent more efficient: {efficiency}")
+
+
+
+
+
+
+# how to assign lists with specific instructions
+# tenCount_data = [x for x in data if x % 2 == 0 and x % 5 == 0] #to make a list of all things divisable by tens
+
+if __name__ == "__main__":
+    #  code that actually DOES things goes here
+    
+
+    driver(1000000)
+    Numz = int(input("Enter a new amount of numbers to try it with!"))
+    driver(Numz)
+    
+
 
 
 
@@ -70,11 +88,9 @@ if __name__ == "__main__":
     
 
     #print (f"Primes: {prime_data}")
-    print (f"Num of Primes for Single: {len(prime_data)}")
-    print (f"Single thread time-elapsed: {single_time} (in seconds)")
-    print (f"Num of Primes for Multi: {len(CleanPrimeList)}")
-    print (f"Multi thread time-elapsed: {multi_time} (in seconds)")
-    print (f"Multi is: {speed} times faster")
-    print (f"Multi is this percent more efficient: {efficiency}")
+   
+
+    
+
 
 
