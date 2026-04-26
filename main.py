@@ -37,6 +37,8 @@ if __name__ == "__main__":
 
     end_time_prime = time.perf_counter() # ends the timer
 
+    single_time = end_time_prime - start_time_prime
+
 
 #############// MULTI THREADED //############
 
@@ -51,7 +53,12 @@ if __name__ == "__main__":
 
     end_time_prime_threaded = time.perf_counter()
 
+    multi_time = end_time_prime_threaded - start_time_prime_threaded
 
+    #efficiently calculator
+
+    speed = (single_time / multi_time)
+    efficiency = speed / cpu_count()
 
 
 
@@ -64,7 +71,10 @@ if __name__ == "__main__":
 
     #print (f"Primes: {prime_data}")
     print (f"Num of Primes for Single: {len(prime_data)}")
-    print (f"Single thread time-elapsed: {end_time_prime - start_time_prime} (in seconds)")
+    print (f"Single thread time-elapsed: {single_time} (in seconds)")
     print (f"Num of Primes for Multi: {len(CleanPrimeList)}")
-    print (f"Multi thread time-elapsed: {end_time_prime_threaded - start_time_prime_threaded} (in seconds)")
+    print (f"Multi thread time-elapsed: {multi_time} (in seconds)")
+    print (f"Multi is: {speed} times faster")
+    print (f"Multi is this percent more efficient: {efficiency}")
+
 
